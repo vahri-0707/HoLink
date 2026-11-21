@@ -1,0 +1,25 @@
+# OS and editor files
+.DS_Store
+._*
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local tools, credentials, and environment configuration
+.agents/
+.codex/
+.aws/
+.env
+.env.*
+!.env.example
+
+# Dependencies, generated caches, and logs
+node_modules/
+dist/
+coverage/
+.cache/
+*.log
+
+# Temporary connection-diagnostic capture
+/ux-review/08-figma-bridge-check.png

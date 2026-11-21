@@ -1,0 +1,54 @@
+const page=await figma.getNodeByIdAsync(LEDGER.pages.refinement);await figma.setCurrentPageAsync(page);
+if(page.children.some(n=>n.name==='00 / Brief & rationale'))throw Error('Refinement documentation already exists.');
+const docs={},secs={};
+const top=S('00 / Brief & rationale','Part B and Part C',0,0);page.appendChild(top);top.resizeWithoutConstraints(3032,760);secs.brief=top.id;
+const brief=f('Start here / HoLink Collection refinement',1440,680,'VERTICAL','color/surface/canvas');pad(brief,48);gap(brief,20);top.appendChild(brief);brief.x=40;brief.y=40;docs.brief=brief.id;
+const mast=row('Document masthead',1344,32);mast.counterAxisAlignItems='CENTER';add(mast,I('logo','Original HoLink logo'));const ms=f('Flexible masthead',1,1);add(mast,ms,true);add(mast,T('UI/UX REFINEMENT · PART B + C','Micro / 11','color/text/brand'));add(brief,mast,true);
+add(brief,T('Organize your links,\nwithout starting over.','Display / 40','color/text/primary',1344));
+add(brief,T('A focused improvement to HoLink’s Collection flow: move the blocks you already have, from the place you expect.','Body / 14','color/text/secondary',1200));
+const flow=f('Proposed task flow',1344,112,'VERTICAL','color/surface/selected');pad(flow,20);gap(flow,12);rad(flow,16);add(flow,T('The proposed path','Label / 14','color/text/brand'));const path=row('Task steps',1304,40);gap(path,12);
+for(const [i,label,w]of [[0,'Add to Collection',208],[1,'Existing blocks',176],[2,'Select blocks',164],[3,'Move 2 blocks',180]]){if(i)add(path,icon('chevron-right','color/icon/brand',16));add(path,btn(label,i===3?'Primary':'Secondary',w));}add(flow,path,true);add(brief,flow,true);
+const nav=row('Document navigation',1344,120);gap(nav,24);for(const [title,body]of [['01 · Refinement','Two states, comparison & rationale'],['02 · Foundations','Color, typography, spacing & elevation'],['03 · Components','Atoms → molecules → organisms']])add(nav,I('doc/card',title,{Title:title,Body:body},432,120),true);add(brief,nav,true);
+add(brief,T('UI copy stays in English, matching the current editor. Creator content is illustrative. The three-panel model and original HoLink logo are retained. Primary buttons use solid HoLink blue (#004ED7).','Caption / 12','color/text/tertiary',1344));
+const rationale=f('Part C / Design rationale',1440,680,'VERTICAL','color/surface/canvas');pad(rationale,48);gap(rationale,24);top.appendChild(rationale);rationale.x=1552;rationale.y=40;docs.rationale=rationale.id;
+const rh=f('Rationale heading',1344,100);gap(rh,8);add(rh,T('PART C / DESIGN RATIONALE','Micro / 11','color/text/brand'));add(rh,T('Solve the task, preserve the editor.','Title / 28'));add(rh,T('A realistic flow refinement for creators who already have content on their page.','Body / 14','color/text/secondary'));add(rationale,rh,true);
+const rationaleGrid=f('Rationale cards',1344,448,'HORIZONTAL');rationaleGrid.layoutWrap='WRAP';rationaleGrid.counterAxisSpacing=24;gap(rationaleGrid,24);hug(rationaleGrid);
+const rationaleContent=[
+ ['01 / Why this problem','Organizing an existing page is a routine creator task. The current Add to Collection action opens a new-block catalog, while moving existing blocks is discovered through Select Multiple and Move.'],
+ ['02 / What changed','The Collection opens a contextual Existing blocks / New block picker. Clear row labels, checkboxes, a selected count and a named destination lead to one explicit Move action.'],
+ ['03 / How it helps','The list, preview and properties remain in context. Staged selection prevents accidental moves; the result is visible in both panels, and an Undo action supports recovery. URLs and settings are preserved.'],
+ ['04 / One trade-off','The picker temporarily occupies the properties panel. Creators must finish or cancel before changing styles. Longer pages rely on search and scrolling; the original bulk-selection path stays available.']
+];
+for(const [title,body]of rationaleContent)add(rationaleGrid,I('doc/card',title,{Title:title,Body:body},660,212));add(rationale,rationaleGrid,true);
+const beforeSec=S('02 / Before & after','Live screenshot versus proposed high-fidelity state',0,2320);page.appendChild(beforeSec);beforeSec.resizeWithoutConstraints(1520,1200);secs.comparison=beforeSec.id;
+const comparison=f('Before & after / Evidence',1440,1120,'VERTICAL','color/surface/canvas');pad(comparison,48);gap(comparison,24);beforeSec.appendChild(comparison);comparison.x=40;comparison.y=40;docs.comparison=comparison.id;
+const bh=f('Comparison heading',1344,100);gap(bh,8);add(bh,T('PART B / BEFORE & AFTER','Micro / 11','color/text/brand'));add(bh,T('From a detour to a direct choice.','Title / 28'));add(bh,T('Before: captured live on 21 Nov 2026. After: a proposed interface with illustrative creator content.','Body / 14','color/text/secondary'));add(comparison,bh,true);
+const beforeHash=figma.createImage(figma.base64Decode(BEFORE_BASE64)).hash;
+const afterNode=await figma.getNodeByIdAsync(LEDGER.screens.screenA);const afterBytes=await afterNode.exportAsync({format:'PNG',constraint:{type:'SCALE',value:1}});const afterHash=figma.createImage(afterBytes).hash;
+const evidence=row('Screenshot comparison',1344,640);gap(evidence,48);
+for(const [tag,title,desc,hash]of [
+ ['BEFORE / EXISTING HOLINK','“Add to Collection” opens a new-block catalog.','To use existing blocks, creators leave this dialog and find Select Multiple → Move → choose Collection.',beforeHash],
+ ['AFTER / PROPOSED REFINEMENT','Existing blocks, visible destination, explicit move.','Existing and new blocks share the same entry point. Select in context, understand the move, then confirm.',afterHash]
+]){
+ const col=f(tag,648,640);gap(col,16);hug(col);add(col,T(tag,'Micro / 11','color/text/brand'));const img=f('Evidence screenshot / '+tag,648,432,'VERTICAL','color/surface/subtle');img.fills=[{type:'IMAGE',imageHash:hash,scaleMode:'FIT'}];rad(img,12);stroke(img,'color/border/default');img.clipsContent=true;add(col,img,true);add(col,T(title,'Heading / 16','color/text/primary',648));add(col,T(desc,'Body / 14','color/text/secondary',648));add(evidence,col);
+}
+add(comparison,evidence,true);
+const sourceNote=f('Evidence note',1344,120,'VERTICAL','color/surface/base');pad(sourceNote,20);gap(sourceNote,8);rad(sourceNote,12);add(sourceNote,T('Evidence, not a flattened deliverable.','Label / 14'));add(sourceNote,T('These two images are comparison screenshots only. Both proposed 1440 × 960 screens above are editable Figma frames assembled from reusable component instances. The original product was not modified for this challenge.','Body / 13','color/text/secondary',1304));add(comparison,sourceNote,true);
+const interactionSec=S('03 / Interaction & validation','Expected behavior and prototype boundary',1512,2320);page.appendChild(interactionSec);interactionSec.resizeWithoutConstraints(1520,1200);secs.interactions=interactionSec.id;
+const notes=f('Interaction specification & validation',1440,1120,'VERTICAL','color/surface/canvas');pad(notes,48);gap(notes,24);interactionSec.appendChild(notes);notes.x=40;notes.y=40;docs.interactions=notes.id;
+const ih=f('Interaction notes heading',1344,100);gap(ih,8);add(ih,T('INTERACTION NOTES','Micro / 11','color/text/brand'));add(ih,T('Make the result predictable.','Title / 28'));add(ih,T('Production behavior is specified here; the linked prototype demonstrates the primary move and recovery path.','Body / 14','color/text/secondary',1344));add(notes,ih,true);
+const table=f('Behavior specification',1344,520,'VERTICAL','color/surface/base');rad(table,16);stroke(table,'color/border/default');hug(table);
+const th=row('Table header',1344,44,'color/surface/selected');pad(th,12,20);gap(th,24);add(th,T('ACTION / STATE','Micro / 11','color/text/brand',220));add(th,T('EXPECTED BEHAVIOR','Micro / 11','color/text/brand',1060));add(table,th,true);
+const behaviors=[
+ ['Open Collection picker','Existing blocks is the default source. List eligible page blocks; omit Collections and blocks already in this Collection. Keep the destination visible.'],
+ ['Select & search','Search matches block title and domain. Checkbox and row background show selection. At zero selection, Move is disabled. Selection survives filtering.'],
+ ['Confirm move','Move selected blocks into Portfolio in their existing relative order. Preserve URLs, appearance and visibility; update the list and preview after success.'],
+ ['Cancel / close / Escape','Discard staged changes, restore Collection properties and return focus to Add to Collection. No blocks move before confirmation.'],
+ ['Undo','Restore original grouping and positions. Dismiss the success toast. The prototype returns to the pre-move selection state for review.'],
+ ['New block','Open the existing new-block catalog scoped to this Collection. Preserve the familiar global Add Block and bulk-selection workflows.'],
+ ['Keyboard & focus','Tab follows panel order; Space toggles a row, Enter confirms the enabled action, Escape cancels. Keep a visible focus outline and meaningful control labels.']
+];
+for(const [action,detail]of behaviors){const tr=row(action,1344,64);pad(tr,12,20);gap(tr,24);tr.counterAxisAlignItems='CENTER';add(tr,T(action,'Label / 14','color/text/primary',220));add(tr,T(detail,'Body / 13','color/text/secondary',1060));add(table,tr,true);const divider=f('Row divider',1344,1,'HORIZONTAL','color/surface/muted');add(table,divider,true);}add(notes,table,true);
+const proto=f('Prototype scope',1344,112,'VERTICAL','color/surface/selected');pad(proto,20);gap(proto,8);rad(proto,12);add(proto,T('Prototype scope · two pre-selected blocks','Label / 14','color/text/brand'));add(proto,T('Wired: Move 2 blocks, Undo, and Add to Collection from the result state. Search, arbitrary checkbox changes, Cancel, keyboard behavior and the New block catalog are specified rather than simulated. The current Starter plan restricts variable-based interactions.','Body / 13','color/text/secondary',1304));add(notes,proto,true);
+const validate=f('Usability validation plan',1344,128,'VERTICAL','color/surface/base');pad(validate,20);gap(validate,8);rad(validate,12);add(validate,T('Validate with existing HoLink users','Label / 14'));add(validate,T('Task: move Brand identity and Latest projects into Portfolio without creating them again. Observe the first click, independent completion, wrong turns and recovery with Undo. Hypothesis: the contextual choice reduces detours. No user testing or measured improvement is claimed.','Body / 13','color/text/secondary',1304));add(notes,validate,true);
+await Promise.all(PENDING);figma.viewport.scrollAndZoomIntoView([brief]);return {documentation:docs,documentationSections:secs,createdIds:CREATED,validation:Object.entries(docs).map(([key,id])=>({...inspect(page.findOne(n=>n.id===id)),key})),comparisonImages:comparison.findAll(n=>'fills'in n&&Array.isArray(n.fills)&&n.fills.some(f=>f.type==='IMAGE')).map(n=>({id:n.id,name:n.name,width:n.width,height:n.height}))};

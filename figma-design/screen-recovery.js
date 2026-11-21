@@ -1,0 +1,24 @@
+const page=await figma.getNodeByIdAsync(LEDGER.pages.refinement);await figma.setCurrentPageAsync(page);
+const sec=await figma.getNodeByIdAsync('10:4674'),a=await figma.getNodeByIdAsync('10:4679'),b=await figma.getNodeByIdAsync('10:5228');
+const right=a.findOne(n=>n.name==='Contextual properties panel');
+const originalProperties=right.findOne(n=>n.type==='INSTANCE'&&n.name==='Collection properties / before move');
+const picker=right.findOne(n=>n.type==='INSTANCE'&&n.name==='Existing block picker');
+originalProperties.setBoundVariable('visible',null);originalProperties.visible=true;
+picker.layoutPositioning='ABSOLUTE';picker.x=0;picker.y=0;
+const isOpen=await figma.variables.getVariableByIdAsync('VariableID:10:5226');
+const closed=await figma.variables.getVariableByIdAsync('VariableID:10:5227');if(closed)closed.remove();
+picker.setBoundVariable('visible',isOpen);
+const wiring=[];
+const nodeAction=id=>({type:'NODE',destinationId:id,navigation:'NAVIGATE',transition:null,resetScrollPosition:true});
+const openAction=value=>({type:'SET_VARIABLE',variableId:isOpen.id,variableValue:{type:'BOOLEAN',resolvedType:'BOOLEAN',value}});
+async function wire(n,action){if(!n)throw Error('Missing prototype control');await n.setReactionsAsync([{trigger:{type:'ON_CLICK'},actions:[action]}]);wiring.push({id:n.id,name:n.name,action});}
+await wire(picker.findOne(n=>n.type==='INSTANCE'&&n.name==='Move 2 blocks'),nodeAction(b.id));
+for(const name of ['Cancel','Close block picker'])await wire(picker.findOne(n=>n.type==='INSTANCE'&&n.name===name),openAction(false));
+for(const n of a.findAll(n=>n.type==='INSTANCE'&&n.name==='Add to Collection'))await wire(n,openAction(true));
+for(const n of b.findAll(n=>n.type==='INSTANCE'&&n.name==='Add to Collection'))await wire(n,nodeAction(a.id));
+const toast=b.findOne(n=>n.type==='INSTANCE'&&n.name==='Move confirmation');await wire(toast.findOne(n=>n.type==='INSTANCE'&&n.name==='Undo action'),nodeAction(a.id));
+page.flowStartingPoints=[{nodeId:a.id,name:'Move existing blocks to Portfolio'}];
+const capA=T('01 / Staged selection · two existing blocks selected; the page stays unchanged until confirmation.','Body / 14','color/text/secondary',1400);sec.appendChild(capA);capA.x=40;capA.y=1160;
+const capB=T('02 / Committed result · nested blocks, updated preview, explicit success feedback and Undo.','Body / 14','color/text/secondary',1400);sec.appendChild(capB);capB.x=1552;capB.y=1160;
+await Promise.all(PENDING);figma.viewport.scrollAndZoomIntoView([a]);
+return {screens:{screenA:a.id,screenB:b.id,screenSection:sec.id,pickerInstance:picker.id,propertiesBefore:originalProperties.id,toast:toast.id},prototype:{collection:'VariableCollectionId:10:5225',openVariable:isOpen.id,wiring,scope:'Two-block selection is preconfigured. Move, Cancel, Close, reopen and Undo are wired. Search, arbitrary row selection and New block catalog are documented production behaviors, not simulated. Starter supports a single action per reaction.'},createdIds:CREATED,validation:[inspect(a),inspect(b)],fontFamilies:[...new Set([...a.findAll(n=>n.type==='TEXT'),...b.findAll(n=>n.type==='TEXT')].map(n=>n.fontName.family))],imageNodes:a.findAll(n=>'fills'in n&&Array.isArray(n.fills)&&n.fills.some(f=>f.type==='IMAGE')).map(n=>({id:n.id,name:n.name,width:n.width,height:n.height}))};

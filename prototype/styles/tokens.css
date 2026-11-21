@@ -1,0 +1,16 @@
+@font-face{font-family:Manrope;src:url('/assets/fonts/Manrope.ttf') format('truetype');font-style:normal;font-weight:200 800;font-display:swap}
+:root{
+  color-scheme:light;
+  --brand-start:#008fdb;--brand-primary:#004ed7;--brand-hover:#003ea9;--brand-gradient:linear-gradient(100deg,var(--brand-start),var(--brand-primary));
+  --surface:#fff;--canvas:#fbfcfe;--subtle:#f5f7fa;--muted:#eceff4;--selected:#eff5ff;
+  --text:#151c2b;--text-secondary:#4d5a70;--text-tertiary:#66738a;--text-inverse:#fff;
+  --border:#dce2eb;--border-strong:#c5cedc;--focus:#bdd5ff;--icon-muted:#94a0b2;
+  --success:#127653;--success-bg:#edf9f3;--error:#bc3434;--error-bg:#fff1f1;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;
+  --radius-sm:4px;--radius-8:8px;--radius-control:10px;--radius-row:12px;--radius-group:16px;--radius-preview:24px;--radius-full:999px;
+  --shadow-card:0 2px 8px rgb(13 26 51 / .04);--shadow-preview:0 12px 40px rgb(13 26 51 / .08);--shadow-toast:0 8px 28px rgb(13 26 51 / .12);
+  --rail-width:72px;--nav-expanded-width:272px;--nav-surface:#fafbfc;--list-width:296px;--inspector-width:360px;--header-height:72px;--control-height:40px;
+  --icon-compact:16px;--icon-control:20px;--icon-feature:24px;
+  --group-inset:8px;--group-gap:8px;--group-radius:16px;--group-child-radius:8px;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+}
