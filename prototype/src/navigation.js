@@ -1,4 +1,5 @@
 import { button, e, icon, iconButton } from './components.js';
+import { assetUrl } from './paths.js';
 
 const groups = [
   {label:'Menu',items:[['HoLink','layout-dashboard','home'],['Analytics','chart-no-axes-column'],['SEO','search']]},
@@ -23,7 +24,7 @@ export function appNavigation({expanded,overlay,helpOpen,steps}) {
     return row+(action==='nav-help'&&helpExpanded?`<div id="nav-help-links" class="nav-help-links">${button('Editor guide',{kind:'ghost',action:'help',attrs:'data-focus-key="nav-guide"'})}${button('Setup checklist',{kind:'ghost',action:'setup',attrs:'data-focus-key="nav-setup"'})}</div>`:'');
   };
   return `<aside class="app-rail ${expanded?'is-expanded':''}" ${overlay?'role="dialog" aria-modal="true"':''} aria-label="Primary navigation">
-    <div class="nav-brand-row">${expanded?'<img class="nav-brand-logo" src="/assets/holink-logo.png" width="120" height="30" alt="HoLink">':''}${iconButton('sidebar',expanded?'Collapse sidebar':'Expand sidebar',{action:'nav-toggle',className:'nav-toggle',attrs:`aria-expanded="${expanded}" aria-controls="main-navigation" data-focus-key="nav-toggle"`})}</div>
+    <div class="nav-brand-row">${expanded?`<img class="nav-brand-logo" src="${e(assetUrl('/assets/holink-logo.png'))}" width="120" height="30" alt="HoLink">`:''}${iconButton('sidebar',expanded?'Collapse sidebar':'Expand sidebar',{action:'nav-toggle',className:'nav-toggle',attrs:`aria-expanded="${expanded}" aria-controls="main-navigation" data-focus-key="nav-toggle"`})}</div>
     <nav id="main-navigation" class="nav-scroll" aria-label="Main navigation" data-scroll-key="navigation">${groups.map(group=>`<section class="nav-group" aria-label="${group.label}"><h2 class="nav-group-label">${group.label}</h2>${group.items.map(item).join('')}</section>`).join('')}</nav>
     <div class="nav-footer">${expanded?`<section class="setup-card" aria-label="Your setup checklist"><div class="setup-card-summary">${progressRing(percent)}<div><h2>Your setup checklist</h2><p>${completed} of ${steps.length} complete</p></div></div>${button(completed===steps.length?'Review setup':'Finish setup',{action:'setup',attrs:'data-focus-key="setup-checklist"'})}</section>`:`<button type="button" class="setup-compact" data-action="setup" data-focus-key="setup-checklist" aria-label="Setup checklist, ${percent}% complete" title="Your setup checklist">${progressRing(percent)}</button>`}</div>
   </aside>`;

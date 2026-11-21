@@ -1,6 +1,7 @@
 import { domain } from './model.js';
 import { ICONS, ICON_FAMILY } from './icons.js';
 import { blockLabel, blockIcon } from './catalog.js';
+import { assetUrl } from './paths.js';
 
 export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 export const e = escapeHtml;
@@ -9,7 +10,7 @@ export const e = escapeHtml;
 export function icon(name, size = 20, className = '', { selected = false } = {}) {
   const source = ICONS[name];
   if (!source) throw new Error(`Unknown icon: ${name}`);
-  return `<span class="icon icon--${size} ${className}" data-icon-family="${ICON_FAMILY}" data-icon-weight="${selected?'Fill':'Regular'}" data-icon-id="${source[selected?'filled':'outline']}" style="--icon-url:url('/assets/icons/${name}${selected?'-fill':''}.svg')" aria-hidden="true"></span>`;
+  return `<span class="icon icon--${size} ${className}" data-icon-family="${ICON_FAMILY}" data-icon-weight="${selected?'Fill':'Regular'}" data-icon-id="${source[selected?'filled':'outline']}" style="--icon-url:url('${e(assetUrl(`/assets/icons/${name}${selected?'-fill':''}.svg`))}')" aria-hidden="true"></span>`;
 }
 
 export function button(label, { action = '', kind = 'primary', glyph, id = '', attrs = '', disabled = false, className = '', type = 'button', selected = false } = {}) {
@@ -45,7 +46,7 @@ export function blockRow(block, { nested = false, active = false, bulk = false, 
 
 export function previewLink(block, previewMode) {
   const inner = `<span class="preview-link-icon">${icon('link', 16)}</span><span class="preview-link-copy"><span>${e(block.title)}</span>${block.description ? `<small>${e(block.description)}</small>` : ''}</span>${icon('arrow-up-right', 16, 'muted')}`;
-  const display=block.display||'classic',content=display==='classic'?inner:`<img class="preview-cover-image" src="${e(block.image||'/assets/illustrations/studio-blue.svg')}" alt="" loading="lazy"><span class="preview-cover-copy">${inner}</span>`;
+  const display=block.display||'classic',content=display==='classic'?inner:`<img class="preview-cover-image" src="${e(assetUrl(block.image||'/assets/illustrations/studio-blue.svg'))}" alt="" loading="lazy"><span class="preview-cover-copy">${inner}</span>`;
   const className=`preview-link ${display!=='classic'?`preview-link--${display}`:''}`;
   return previewMode ? `<a class="${className}" data-preview-block="${e(block.id)}" href="${e(block.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${e(block.title)}">${content}</a>` : `<button type="button" class="${className}" data-preview-block="${e(block.id)}" data-action="select-block" data-id="${e(block.id)}">${content}</button>`;
 }

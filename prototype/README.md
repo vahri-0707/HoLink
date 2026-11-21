@@ -2,6 +2,8 @@
 
 Live preview: **http://localhost:5173**. Requires Node.js 20+; no package installation or build step. The QR encoder is vendored locally with its MIT license.
 
+Hosted prototype: [vahri-0707.github.io/HoLink](https://vahri-0707.github.io/HoLink/). `npm run build:pages` creates the static `dist/` directory for GitHub Pages; the workflow at `../.github/workflows/deploy-pages.yml` deploys it automatically from `main`. Static output disables development live reload, resolves assets relative to the deployed app, and preserves canonical saved asset paths.
+
 The searchable **15-type block catalogue**, mixed-content examples, solid primary buttons, component organization, and current verification are documented in [BLOCKS.md](./BLOCKS.md).
 
 ```sh
@@ -76,7 +78,7 @@ npm test
 npm run check
 ```
 
-All **13 model tests**, JavaScript syntax checks, and **94 SVG checks** pass. Tests cover all 15 content types, mixed moves, stable order, duplicate prevention, Undo/Redo, provider and URL validation, the 20-block limit, and preservation of saved content during the v1 upgrade.
+All **16 tests** (13 model and 3 static-deployment tests), JavaScript syntax checks, and **94 SVG checks** pass. Tests cover all 15 content types, mixed moves, stable order, duplicate prevention, Undo/Redo, provider and URL validation, the 20-block limit, preservation of saved content during the v1 upgrade, project-path assets, and the packaged static site.
 
 Browser checks cover Move/Undo, retained selection across drawer open/close, header and Page Settings filled states, outlined selected block icons, Help hierarchy, focus trapping, Escape/backdrop dismissal, and unchanged editor geometry. At 654 × 722 there is no horizontal page overflow; the drawer is x = 8, y = 8, width = 272.
 

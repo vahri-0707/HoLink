@@ -4,6 +4,7 @@ import { badge, blockRow, button, candidateRow, e, icon, iconButton, input, layo
 import { appNavigation, progressRing } from './navigation.js';
 import { BLOCK_TYPES, blockLabel, blockIcon, draftForType, isContentBlock, youtubeId } from './catalog.js';
 import { blockLibrary, newBlockForm, contentFields, previewBlock } from './block-content.js';
+import { assetUrl } from './paths.js';
 
 const STORAGE_KEY = 'holink-collection-prototype-v1';
 const PREVIEW_STORAGE_KEY = 'holink-preview-reviewed-v1';
@@ -68,7 +69,7 @@ function rail() {
 }
 
 function header() {
-  return `<header class="topbar" ${isNavigationOverlay()?'inert':''}><h1 class="sr-only">HoLink page editor</h1><div class="header-brand-slot"><img class="header-brand" src="/assets/holink-logo.png" width="112" height="28" alt="HoLink"></div>
+  return `<header class="topbar" ${isNavigationOverlay()?'inert':''}><h1 class="sr-only">HoLink page editor</h1><div class="header-brand-slot"><img class="header-brand" src="${e(assetUrl('/assets/holink-logo.png'))}" width="112" height="28" alt="HoLink"></div>
     <button type="button" class="page-url" data-action="copy-url" aria-label="Copy page URL">${icon('link', 16)}<span>ho.link/${e(page.profile.slug)}</span>${icon('copy', 16)}</button>
     <div class="header-actions"><span class="save-status">${icon('circle-check', 16)}<span>All changes saved</span></span>
     ${button('Support', { glyph:'headphones',action:'help',className:'support-button',selected:ui.dialog==='help',attrs:'data-focus-key="support"' })}
@@ -328,7 +329,7 @@ function activate(action, node, event = {}) {
       const block=page.blocks[id],index=((ui.mediaSlides.get(id)||0)+Number(value)+block.images.length)%block.images.length;
       ui.mediaSlides.set(id,index);
       for(const frame of root.querySelectorAll(`[data-gallery-id="${CSS.escape(id)}"]`)) {
-        const image=frame.querySelector('img');image.src=block.images[index];image.alt=`${block.title} · image ${index+1}`;
+        const image=frame.querySelector('img');image.src=assetUrl(block.images[index]);image.alt=`${block.title} · image ${index+1}`;
         const count=frame.querySelector('.gallery-position,.gallery-count');if(count)count.textContent=`${index+1} / ${block.images.length}`;
       }
       return;
@@ -522,5 +523,7 @@ root.addEventListener('focusin',event=>{if(event.target.closest('[data-toast]'))
 window.addEventListener('resize',()=>{if(ui.navOverlay!==isNavigationOverlay())render();else syncScrollGutters();});
 
 render();
-const updates=new EventSource('/__dev/events');
-updates.onmessage=event=>{if(event.data==='reload')location.reload();};
+if(document.querySelector('meta[name="holink-development"]')?.content==='true') {
+  const updates=new EventSource('/__dev/events');
+  updates.onmessage=event=>{if(event.data==='reload')location.reload();};
+}

@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
     "test": "node --test tests/*.test.mjs",
     "check:icons": "node scripts/check-icons.mjs",
-    "check": "node --check src/app.js && node --check src/components.js && node --check src/catalog.js && node --check src/block-content.js && node --check src/data.js && node --check src/navigation.js && node --check src/icons.js && node --check src/model.js && node --check server.mjs"
+    "check": "node --check src/app.js && node --check src/components.js && node --check src/catalog.js && node --check src/block-content.js && node --check src/data.js && node --check src/navigation.js && node --check src/icons.js && node --check src/model.js && node --check src/paths.js && node --check scripts/build-pages.mjs && node --check server.mjs"
   }
 }

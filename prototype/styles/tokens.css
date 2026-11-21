@@ -1,4 +1,4 @@
-@font-face{font-family:Manrope;src:url('/assets/fonts/Manrope.ttf') format('truetype');font-style:normal;font-weight:200 800;font-display:swap}
+@font-face{font-family:Manrope;src:url('../assets/fonts/Manrope.ttf') format('truetype');font-style:normal;font-weight:200 800;font-display:swap}
 :root{
   color-scheme:light;
   --brand-start:#008fdb;--brand-primary:#004ed7;--brand-hover:#003ea9;--brand-gradient:linear-gradient(100deg,var(--brand-start),var(--brand-primary));

@@ -4,6 +4,8 @@ A focused UI/UX challenge exploring how creators organize existing page blocks i
 
 [Open the Figma design](https://www.figma.com/design/mLcMwe2h5guYPYIuYbIBbc/Untitled?node-id=10-4679)
 
+[Open the live prototype on GitHub Pages](https://vahri-0707.github.io/HoLink/)
+
 ## Run locally
 
 Requires **Node.js 20 or newer**. No package installation or build step is needed.
@@ -14,6 +16,19 @@ npm run dev
 ```
 
 Open [localhost:5173](http://localhost:5173/). Edits are saved in the current browser. This is a local prototype; it does not publish changes to a live HoLink account.
+
+## GitHub Pages
+
+The [deployment workflow](.github/workflows/deploy-pages.yml) checks the code, runs the tests, verifies the icons, and publishes the static browser app whenever `prototype/` changes on `main`. It can also be run manually from the repository's Actions tab.
+
+To prepare the same static output locally:
+
+```sh
+cd prototype
+npm run build:pages
+```
+
+The generated `prototype/dist/` contains the app, styles, fonts, icons, and demo media. Development live reload is disabled in this output. Saved asset references work at both a site root and the `/HoLink/` project path.
 
 ## UX focus
 
@@ -62,7 +77,7 @@ npm test
 npm run check:icons
 ```
 
-The current checks cover **13 model tests** and **94 local SVGs / 47 matched Phosphor Regular–Fill pairs**. Tests include type validation, mixed-content moves, ordering, Undo/Redo, URL safety, block limits, and migration of saved edits. See the prototype documentation for browser checks and unverified areas.
+The current checks cover **16 tests** (13 model tests and 3 static-deployment tests) and **94 local SVGs / 47 matched Phosphor Regular–Fill pairs**. Tests include type validation, mixed-content moves, ordering, Undo/Redo, URL safety, block limits, migration of saved edits, project-path asset resolution, and completeness of the production artifact. See the prototype documentation for browser checks and unverified areas.
 
 ## Assets and attribution
 
